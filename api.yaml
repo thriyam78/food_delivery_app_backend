@@ -1,0 +1,181 @@
+openapi: 3.0.0
+info:
+  title: Food Delivery App API Doc
+  description: To calculate the total cost of food delivery based on various factors.
+  version: 1.0
+  x-logo:
+    description:
+      ## Executive Summary
+
+      The primary focus is on a dynamic pricing module to calculate the total cost of food delivery based on various factors.
+
+servers:
+  - url: http://localhost:8080/
+    description: Local server
+  - url: https://prod.com/
+    description: Pre Production server
+  - url: https://test.com/
+    description: Production server
+
+components:
+  schemas:
+    testCreateOrganizationRequest:
+      required: -id
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+        name:
+          type: string
+    testCreateOrganizationResponse200:
+      type: object
+      properties:
+        status:
+          type: string
+          default: success
+        message:
+          type: string
+          default: Organization created Successfully
+    testCreateOrganizationResponse401:
+      type: object
+      properties:
+        status:
+          type: string
+          default: failed
+        message:
+          type: string
+          default: Organization Already exists
+    testCreateOrganizationResponse500:
+      type: object
+      properties:
+        status:
+          type: string
+          default: failed
+        message:
+          type: string
+          default: Internal Server Error
+    testTotalPriceRequest:
+      required: -organization_id
+        -zone
+        -total_distance
+        -item_type
+      type: object
+      properties:
+        organization_id:
+          type: string
+          default: 006
+          required: true
+        zone:
+          type: string
+          default: central
+          required: true
+        total_distance:
+          type: number
+          default: 12
+          required: true
+        item_type:
+          type: string
+          default: perishable
+          required: true
+
+    testTotalPriceResponse200:
+      type: object
+      properties:
+        status:
+          type: string
+          default: success
+        message:
+          type: string
+          default: 20.5
+    testTotalPriceResponse401:
+      type: object
+      properties:
+        status:
+          type: string
+          default: failed
+        message:
+          type: string
+          default: Needs a Valid Organization
+    testTotalPriceResponse500:
+      type: object
+      properties:
+        status:
+          type: string
+          default: failed
+        message:
+          type: string
+          default: Internal Server Error
+
+paths:
+  /createOrganization:
+    post:
+      tags:
+        - Organization Creation
+      summary: Create Organization
+      description: |-
+        Create a new task. The user provides a Task document, which the server
+        uses as a basis and adds additional fields.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/testCreateOrganizationRequest"
+        required: true
+      responses:
+        "200":
+          description: "Organization will be created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testCreateOrganizationResponse200"
+        "401":
+          description: "Something logic has been missing while sending the request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testCreateOrganizationResponse401"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testCreateOrganizationResponse500"
+      x-codegen-request-body-name: body
+
+  /totalPrice:
+    post:
+      tags:
+        - Total Price Calculation
+      summary: calculating total Price for a given distance.
+      description: |-
+        Create a new task. The user provides a Task document, which the server
+        uses as a basis and adds additional fields.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/testTotalPriceRequest"
+        required: true
+      responses:
+        "200":
+          description: "Calculated Total Price"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testTotalPriceResponse200"
+        "401":
+          description: "Something logic has been missing while sending the request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testTotalPriceResponse401"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testTotalPriceResponse500"
+      x-codegen-request-body-name: body
