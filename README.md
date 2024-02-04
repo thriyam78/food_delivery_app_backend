@@ -1,6 +1,7 @@
 # food_delivery_app_backend
 
 Start the server with
+
 npm run dev
 
 Local DB setup in .env
